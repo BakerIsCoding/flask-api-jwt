@@ -14,6 +14,7 @@ def get_connection():
     except CustomException as ex:
         raise CustomException(ex)
 
+
 def getUserById(userId):
     try:
         connection = get_connection()
@@ -44,5 +45,30 @@ def getAllUsers():
         cursor.execute(query)
         users = cursor.fetchall()
         return users
+    except CustomException as ex:
+        raise CustomException(ex)
+    
+def updateUser(user):
+    try:
+        ##User params: id, username, password, email, isadmin
+        connection = get_connection()
+        cursor = connection.cursor()
+        query = "UPDATE user SET username = %s, password = %s, email = %s, isadmin = %s WHERE id = %s"
+        cursor.execute(query, (user.username, user.password, user.email, user.isadmin, user.id))
+        connection.commit()
+        connection.close()
+        return True
+    except CustomException as ex:
+        raise CustomException(ex)
+
+def deleteUser(id):
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        query = "DELETE FROM user WHERE id = %s"
+        cursor.execute(query, (id))
+        connection.commit()
+        connection.close()
+        return True
     except CustomException as ex:
         raise CustomException(ex)

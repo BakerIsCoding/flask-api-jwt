@@ -5,23 +5,22 @@ import hashlib
 import base64
 import os
 
-def decrypt_password(encrypted_password):
-    secret_key = os.environ.get('SECRET_KEY')
+def decryptPassword(encrypted_password):
     
-    # Generar un hash SHA-512 de la clave secreta
-    hashed_key = hashlib.sha512(secret_key.encode()).digest()
+    secretKey = os.environ.get('SECRET_KEY')
+    hashedKey = hashlib.sha512(secretKey.encode()).digest()
 
     # Utilizar el primer bloque de 16 bytes del hash como clave AES
-    aes_key = hashed_key[:16]
-    cipher = Cipher(algorithms.AES(aes_key), modes.CBC(b'\0' * 16), backend=default_backend())
+    aesKey = hashedKey[:16]
+    cipher = Cipher(algorithms.AES(aesKey), modes.CBC(b'\0' * 16), backend=default_backend())
     decryptor = cipher.decryptor()
 
     # Decodificar la contraseña cifrada desde base64
-    encrypted_password_bytes = base64.b64decode(encrypted_password)
-    decrypted_password = decryptor.update(encrypted_password_bytes) + decryptor.finalize()
+    encryptedPasswordBytes = base64.b64decode(encrypted_password)
+    decryptedPassword = decryptor.update(encryptedPasswordBytes) + decryptor.finalize()
 
     # Eliminar el relleno y convertir a cadena
-    decrypted_password_str = decrypted_password.rstrip(b'\0').decode()
+    decryptedPasswordStr = decryptedPassword.rstrip(b'\0').decode()
 
-    return decrypted_password_str
+    return decryptedPasswordStr
 
